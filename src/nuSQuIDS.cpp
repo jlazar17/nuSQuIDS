@@ -3169,6 +3169,7 @@ interactions_initialized(other.interactions_initialized),
 ioscillations(other.ioscillations),
 tauregeneration(other.tauregeneration),
 iglashow(other.iglashow),
+iloop_potential(other.iloop_potential),
 positivization(other.positivization),
 allowConstantDensityOscillationOnlyEvolution(other.allowConstantDensityOscillationOnlyEvolution),
 progressbar(other.progressbar),
@@ -3238,6 +3239,7 @@ nuSQUIDS& nuSQUIDS::operator=(nuSQUIDS&& other){
   ioscillations = other.ioscillations;
   tauregeneration = other.tauregeneration;
   iglashow = other.iglashow;
+  iloop_potential = other.iloop_potential;
   positivization = other.positivization;
   allowConstantDensityOscillationOnlyEvolution = other.allowConstantDensityOscillationOnlyEvolution;
   progressbar = other.progressbar;
