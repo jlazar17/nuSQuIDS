@@ -322,6 +322,8 @@ template<typename BaseType, typename = typename std::enable_if<std::is_base_of<n
       class_object->def("Set_AdaptiveStep",&BaseType::Set_AdaptiveStep);
       class_object->def("Set_GSL_step",wrap_Set_GSL_STEP<BaseType>);
       class_object->def("Set_TauRegeneration",&BaseType::Set_TauRegeneration);
+      class_object->def("Set_OneLoopMatterPotential",&BaseType::Set_OneLoopMatterPotential);
+      class_object->def("Get_OneLoopMatterPotential",&BaseType::Get_OneLoopMatterPotential);
       class_object->def("Set_GlashowResonance",&BaseType::Set_GlashowResonance);
       class_object->def("Set_IncludeOscillations",&BaseType::Set_IncludeOscillations);
       class_object->def("Set_AllowConstantDensityOscillationOnlyEvolution",&BaseType::Set_AllowConstantDensityOscillationOnlyEvolution);
@@ -379,6 +381,7 @@ template<typename BaseType, typename = typename std::enable_if<std::is_base_of<n
       class_object->def(init<std::string>(args("filename")));
       class_object->def("EvolveState",&nuSQUIDSAtm<BaseType>::EvolveState);
       class_object->def("Set_TauRegeneration",&nuSQUIDSAtm<BaseType>::Set_TauRegeneration);
+      class_object->def("Set_OneLoopMatterPotential",&nuSQUIDSAtm<BaseType>::Set_OneLoopMatterPotential);
       class_object->def("EvalFlavor",(double(nuSQUIDSAtm<BaseType>::*)(unsigned int,double,double,unsigned int,bool) const)&nuSQUIDSAtm<BaseType>::EvalFlavor,
           nuSQUIDSAtm_EvalFlavor_overload<nuSQUIDSAtm<BaseType>>(args("Flavor","cos(theta)","Neutrino Energy","NeuType","BoolToRandomzeProdutionHeight"),
             "nuSQuIDSAtm evaluate flux.."));
@@ -423,6 +426,7 @@ template<typename BaseType, typename = typename std::enable_if<std::is_base_of<n
       class_object->def("Set_IncludeOscillations",&nuSQUIDSAtm<BaseType>::Set_IncludeOscillations);
       class_object->def("Set_GlashowResonance",&nuSQUIDSAtm<BaseType>::Set_GlashowResonance);
       class_object->def("Set_TauRegeneration",&nuSQUIDSAtm<BaseType>::Set_TauRegeneration);
+      class_object->def("Set_OneLoopMatterPotential",&nuSQUIDSAtm<BaseType>::Set_OneLoopMatterPotential);
       class_object->def("Set_AllowConstantDensityOscillationOnlyEvolution",&nuSQUIDSAtm<BaseType>::Set_AllowConstantDensityOscillationOnlyEvolution);
       class_object->def("Set_PositivyConstrain",&nuSQUIDSAtm<BaseType>::Set_PositivityConstrain);
       class_object->def("Set_PositivyConstrainStep",&nuSQUIDSAtm<BaseType>::Set_PositivityConstrainStep);

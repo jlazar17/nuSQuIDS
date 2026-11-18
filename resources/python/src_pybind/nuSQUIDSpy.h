@@ -747,6 +747,11 @@ step_type : GSL_STEP_FUNCTIONS
 )doc");
 
       // Physics toggles
+      class_object->def("Set_OneLoopMatterPotential",&BaseType::Set_OneLoopMatterPotential, py::arg("opt"),
+R"doc(Toggle the one-loop Standard Model corrections to the matter potentials (arXiv:2307.04685).
+
+)doc");
+      class_object->def("Get_OneLoopMatterPotential",&BaseType::Get_OneLoopMatterPotential);
       class_object->def("Set_TauRegeneration",&BaseType::Set_TauRegeneration, py::arg("opt"),
 R"doc(Toggle tau regeneration.
 
@@ -1191,6 +1196,10 @@ Propagates neutrinos through Earth for all zenith angles.
 A progress bar is shown if Set_ProgressBar(True) was called.
 )doc");
 
+      class_object->def("Set_OneLoopMatterPotential",&nuSQUIDSAtm<BaseType>::Set_OneLoopMatterPotential, py::arg("opt"),
+R"doc(Toggle the one-loop matter potentials for all trajectories.
+
+)doc");
       class_object->def("Set_TauRegeneration",&nuSQUIDSAtm<BaseType>::Set_TauRegeneration, py::arg("opt"),
 R"doc(Toggle tau regeneration for all trajectories.
 
@@ -1525,6 +1534,7 @@ array
       class_object->def("Set_IncludeOscillations",&nuSQUIDSAtm<BaseType>::Set_IncludeOscillations, py::arg("opt"));
       class_object->def("Set_GlashowResonance",&nuSQUIDSAtm<BaseType>::Set_GlashowResonance, py::arg("opt"));
       class_object->def("Set_TauRegeneration",&nuSQUIDSAtm<BaseType>::Set_TauRegeneration);
+      class_object->def("Set_OneLoopMatterPotential",&nuSQUIDSAtm<BaseType>::Set_OneLoopMatterPotential, py::arg("opt"));
       class_object->def("Set_AllowConstantDensityOscillationOnlyEvolution",&nuSQUIDSAtm<BaseType>::Set_AllowConstantDensityOscillationOnlyEvolution, py::arg("opt"));
       class_object->def("Set_PositivyConstrain",&nuSQUIDSAtm<BaseType>::Set_PositivityConstrain, py::arg("opt"));
       class_object->def("Set_PositivyConstrainStep",&nuSQUIDSAtm<BaseType>::Set_PositivityConstrainStep, py::arg("step"));

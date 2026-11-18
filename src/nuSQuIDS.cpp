@@ -344,10 +344,20 @@ squids::SU_vector nuSQUIDS::HI(unsigned int ie, unsigned int irho) const{
       NC = HI_constants*current_density;
     else
       NC = CC*(-0.5*(1.0-current_ye)/current_ye);
+    double TAU = 0.0;
+    if (iloop_potential){
+      double delta_nc = loop_delta_nc_n;
+      if (current_ye < 1.0 - 1.0e-10)
+        delta_nc += loop_delta_nc_p*current_ye/(1.0-current_ye);
+      NC *= 1.0 + delta_nc;
+      TAU = loop_epsilon_mutau*CC;
+      CC *= 1.0 + loop_delta_cc;
+    }
     // antineutrino matter potential flips sign
     if ((irho == 1 and NT==both) or NT==antineutrino){
       CC*=-1;
       NC*=-1;
+      TAU*=-1;
     }
 
     // construct potential in flavor basis
@@ -357,7 +367,7 @@ squids::SU_vector nuSQUIDS::HI(unsigned int ie, unsigned int irho) const{
       (NC*evol_b1_proj[irho][1][ie]);
     potential += squids::detail::guarantee
       <squids::detail::NoAlias | squids::detail::EqualSizes | squids::detail::AlignedStorage>
-      (NC*evol_b1_proj[irho][2][ie]);
+      ((NC+TAU)*evol_b1_proj[irho][2][ie]);
 
     if (basis == mass)
       potential += H0_array[ie];
@@ -1942,6 +1952,8 @@ void nuSQUIDS::WriteStateHDF5(std::string str,std::string grp,bool save_cross_se
   H5LTset_attribute_int(group, "basic", "tau_regeneration", &auxint, 1);
   auxint = static_cast<int>(iglashow);
   H5LTset_attribute_int(group, "basic", "glashow_resonance", &auxint, 1);
+  auxint = static_cast<int>(iloop_potential);
+  H5LTset_attribute_int(group, "basic", "one_loop_matter_potential", &auxint, 1);
   double auxt = Get_t();
   H5LTset_attribute_double(group, "basic", "squids_time", &auxt,1);
   double auxt_ini = Get_t_initial();
@@ -2302,6 +2314,11 @@ void nuSQUIDS::ReadStateHDF5Internal(std::string str,std::string grp,std::shared
   if(err>=0) tauregeneration=auxint;
   err=H5LTget_attribute_int(group, "basic", "glashow_resonance", &auxint);
   if(err>=0) iglashow=auxint;
+  // absent in files written before this option existed: keep the tree-level default
+  if(H5Aexists_by_name(group, "basic", "one_loop_matter_potential", H5P_DEFAULT) > 0){
+    err=H5LTget_attribute_int(group, "basic", "one_loop_matter_potential", &auxint);
+    if(err>=0) iloop_potential=auxint;
+  }
 
   double squids_time;
   H5LTget_attribute_double(group, "basic", "squids_time", &squids_time);
@@ -2510,6 +2527,11 @@ void nuSQUIDS::ReadStateHDF5(std::string str,std::string grp,std::string cross_s
   if(err>=0) tauregeneration=auxint;
   err=H5LTget_attribute_int(group, "basic", "glashow_resonance", &auxint);
   if(err>=0) iglashow=auxint;
+  // absent in files written before this option existed: keep the tree-level default
+  if(H5Aexists_by_name(group, "basic", "one_loop_matter_potential", H5P_DEFAULT) > 0){
+    err=H5LTget_attribute_int(group, "basic", "one_loop_matter_potential", &auxint);
+    if(err>=0) iloop_potential=auxint;
+  }
 
   double squids_time;
   H5LTget_attribute_double(group, "basic", "squids_time", &squids_time);
@@ -2986,6 +3008,10 @@ void nuSQUIDS::ProgressBar() const{
   }
   std::cout << "] " << int(progress * 100.0) << " %\r";
   std::cout.flush();
+}
+
+void nuSQUIDS::Set_OneLoopMatterPotential(bool opt){
+  iloop_potential = opt;
 }
 
 void nuSQUIDS::Set_TauRegeneration(bool opt){

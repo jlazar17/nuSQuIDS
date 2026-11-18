@@ -485,6 +485,15 @@ protected:
     bool tauregeneration = false;
     /// \brief Whether the Glashsow resonance for electron antineutrinos is used.
     bool iglashow = false;
+    /// \brief Whether the one-loop Standard Model corrections to the matter potentials are used.
+    bool iloop_potential = false;
+    /// \brief One-loop fractional correction to the CC potential (Huang and Zhou, arXiv:2307.04685, Table 3).
+    double loop_delta_cc = 5.8e-2;
+    /// \brief One-loop NC correction: delta_NC = loop_delta_nc_n + loop_delta_nc_p * N_p / N_n (arXiv:2307.04685, Eq. 5.5).
+    double loop_delta_nc_n = 6.2e-2;
+    double loop_delta_nc_p = 2.0e-2;
+    /// \brief Flavor-dependent NC term, (V_NC^tau - V_NC^mu) / V_CC (arXiv:2307.04685, Eq. 1.2).
+    double loop_epsilon_mutau = 5.19e-5;
     /// \brief Boolean that signals that positivization will be enforced.
     bool positivization = false;
     /// \brief Boolean that allows to use fast constant density evolution technique.
@@ -841,6 +850,16 @@ protected:
     /// \brief Toggles neutrino oscillations on and off.
     /// \param opt If \c true neutrino oscillations will be considered.
     void Set_IncludeOscillations(bool opt);
+
+    /// \brief Toggles the one-loop Standard Model corrections to the coherent matter potentials.
+    /// With \c false (default) the tree-level potentials are used. With \c true the CC potential is scaled by
+    /// (1 + 0.058), the universal NC potential by (1 + 0.062 + 0.02 N_p/N_n), and the nu_tau potential gets the
+    /// flavor-dependent term 5.19e-5 V_CC (Huang and Zhou, arXiv:2307.04685; on-shell scheme with G_F = G_mu from
+    /// the muon lifetime, as used here). Sterile flavors have no potential in either case.
+    /// \param opt If \c true the one-loop potentials are used.
+    void Set_OneLoopMatterPotential(bool opt);
+    /// \brief Returns whether the one-loop matter potentials are used.
+    bool Get_OneLoopMatterPotential() const {return iloop_potential;}
 
     /// \brief Toggles if non-hard processes constant density fast evolution will be used.
     /// \param opt If \c true fast evolution will be attempted on constatnt density.
@@ -1836,6 +1855,13 @@ class nuSQUIDSAtm {
     void Set_TauRegeneration(bool opt){
       for(BaseSQUIDS& nsq : nusq_array){
         nsq.Set_TauRegeneration(opt);
+      }
+    }
+
+    /// \brief Toggles the one-loop Standard Model corrections to the matter potentials (see nuSQUIDS).
+    void Set_OneLoopMatterPotential(bool opt){
+      for(BaseSQUIDS& nsq : nusq_array){
+        nsq.Set_OneLoopMatterPotential(opt);
       }
     }
 	
