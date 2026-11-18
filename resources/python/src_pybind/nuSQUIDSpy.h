@@ -748,7 +748,7 @@ step_type : GSL_STEP_FUNCTIONS
 
       // Physics toggles
       class_object->def("Set_OneLoopMatterPotential",&BaseType::Set_OneLoopMatterPotential, py::arg("opt"),
-R"doc(Toggle the one-loop Standard Model corrections to the matter potentials (arXiv:2307.04685).
+R"doc(Toggle the one-loop Standard Model corrections to the matter potentials (arXiv:2307.04685, arXiv:2504.15998).
 
 )doc");
       class_object->def("Get_OneLoopMatterPotential",&BaseType::Get_OneLoopMatterPotential);

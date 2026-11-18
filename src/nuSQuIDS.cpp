@@ -349,9 +349,10 @@ squids::SU_vector nuSQUIDS::HI(unsigned int ie, unsigned int irho) const{
       double delta_nc = loop_delta_nc_n;
       if (current_ye < 1.0 - 1.0e-10)
         delta_nc += loop_delta_nc_p*current_ye/(1.0-current_ye);
-      NC *= 1.0 + delta_nc;
+      // corrections relative to the G_mu tree level: Delta c / c - Delta r (arXiv:2504.15998, Eq. 2.5)
+      NC *= 1.0 + delta_nc - loop_delta_r;
       TAU = loop_epsilon_mutau*CC;
-      CC *= 1.0 + loop_delta_cc;
+      CC *= 1.0 + loop_delta_cc - loop_delta_r;
     }
     // antineutrino matter potential flips sign
     if ((irho == 1 and NT==both) or NT==antineutrino){

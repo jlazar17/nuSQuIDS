@@ -487,11 +487,15 @@ protected:
     bool iglashow = false;
     /// \brief Whether the one-loop Standard Model corrections to the matter potentials are used.
     bool iloop_potential = false;
-    /// \brief One-loop fractional correction to the CC potential (Huang and Zhou, arXiv:2307.04685, Table 3).
+    /// \brief One-loop corrections to the vector couplings in the on-shell scheme (inputs alpha, m_W, m_Z):
+    /// CC: Delta c / c = 0.058 (Huang and Zhou, arXiv:2307.04685, Table 3); NC: 0.062 + 0.020 N_p/N_n (Eq. 5.5).
     double loop_delta_cc = 5.8e-2;
-    /// \brief One-loop NC correction: delta_NC = loop_delta_nc_n + loop_delta_nc_p * N_p / N_n (arXiv:2307.04685, Eq. 5.5).
     double loop_delta_nc_n = 6.2e-2;
     double loop_delta_nc_p = 2.0e-2;
+    /// \brief Delta r: these potentials are written with G_F = G_mu from the muon lifetime, which already contains
+    /// Delta r ~ 3.8% of the radiative correction, so the correction relative to the G_mu tree level is
+    /// Delta c / c - Delta r (Huang, Ohlsson, Vihonen and Zhou, arXiv:2504.15998, Eqs. 2.4-2.5: CC 5.8% -> 2.0%).
+    double loop_delta_r = 3.8e-2;
     /// \brief Flavor-dependent NC term, (V_NC^tau - V_NC^mu) / V_CC (arXiv:2307.04685, Eq. 1.2).
     double loop_epsilon_mutau = 5.19e-5;
     /// \brief Boolean that signals that positivization will be enforced.
@@ -852,10 +856,11 @@ protected:
     void Set_IncludeOscillations(bool opt);
 
     /// \brief Toggles the one-loop Standard Model corrections to the coherent matter potentials.
-    /// With \c false (default) the tree-level potentials are used. With \c true the CC potential is scaled by
-    /// (1 + 0.058), the universal NC potential by (1 + 0.062 + 0.02 N_p/N_n), and the nu_tau potential gets the
-    /// flavor-dependent term 5.19e-5 V_CC (Huang and Zhou, arXiv:2307.04685; on-shell scheme with G_F = G_mu from
-    /// the muon lifetime, as used here). Sterile flavors have no potential in either case.
+    /// With \c false (default) the tree-level potentials are used. With \c true, relative to the tree level in
+    /// G_mu (as nuSQuIDS writes them), the CC potential is scaled by (1 + 0.058 - Delta r) = 1.020, the universal
+    /// NC potential by (1 + 0.062 + 0.02 N_p/N_n - Delta r), about 1.044 for N_p = N_n, and the nu_tau potential
+    /// gets the flavor-dependent term 5.19e-5 V_CC (arXiv:2307.04685, arXiv:2504.15998). Sterile flavors have no
+    /// potential in either case.
     /// \param opt If \c true the one-loop potentials are used.
     void Set_OneLoopMatterPotential(bool opt);
     /// \brief Returns whether the one-loop matter potentials are used.
